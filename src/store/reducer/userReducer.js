@@ -5,6 +5,7 @@ const DEFAULT_STATE = {
   userList: data,
   selectedUser: null,
 
+
 };
 
 const stringify = localStorage.getItem("USER_LIST");
@@ -15,7 +16,7 @@ if (stringify) {
 export const userReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case ADD_USER: {
-      // action.payload.id =Date.now();
+      action.payload.id = Date.now();
       state.userList = [...state.userList, action.payload]; //push action.payload từ form input
       localStorage.setItem("USER_LIST", JSON.stringify(state.userList));
       break;

@@ -16,7 +16,7 @@ class UserManagement extends Component {
         const className = (element.id) % 2 ===0 ? "bg-light": "";
         return (
             <tr key={element.id} className={className}>
-        <td>{element.id} </td>
+        <td>{element.MaSV} </td>
         <td>{element.username}</td>
         <td>{element.email}</td>
         <td>{element.phoneNumber}</td>

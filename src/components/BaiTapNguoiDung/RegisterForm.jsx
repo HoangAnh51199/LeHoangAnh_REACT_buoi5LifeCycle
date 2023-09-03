@@ -1,35 +1,40 @@
 import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
-import { addUserAction, updateUserAction } from "../../store/actions/userAction";
+import {
+  addUserAction,
+  updateUserAction,
+} from "../../store/actions/userAction";
 
- class RegisterForm extends Component {
-  idInputRef = createRef();
+class RegisterForm extends Component {
+  maSVInputRef = createRef();
   usernameInputRef = createRef();
   emailInputRef = createRef();
-  phoneNumberInputRef =createRef();
+  phoneNumberInputRef = createRef();
 
   state = {
-    id:"",
+    MaSV: "",
     username: "",
     phoneNumber: "",
     email: "",
- 
   };
 
-   static getDerivedStateFromProps(nextProps,currentState) {
-   console.log("nextProps",nextProps);
-    console.log("currentState",currentState);
+  static getDerivedStateFromProps(nextProps, currentState) {
+    console.log("nextProps", nextProps);
+    console.log("currentState", currentState);
     //currentState = nextProps.selectedUser;
-     if(nextProps.selectedUser && nextProps.selectedUser.id !== currentState.id) {
+    if (
+      nextProps.selectedUser &&
+      nextProps.selectedUser.id !== currentState.id
+    ) {
       console.log(123);
       currentState = nextProps.selectedUser;
-       }
-  
+    }
+
     return currentState;
-   }
+  }
 
   handleChange = (event) => {
-     //console.log(event);
+    //console.log(event);
     console.log(event.target.name);
     console.log(event.target.value); //log ra value tu o input
     // dynamic key thông qua object literals
@@ -68,8 +73,8 @@ import { addUserAction, updateUserAction } from "../../store/actions/userAction"
     //= domElementId
 
     isValid &= this.validateRequired(
-      this.state.id,
-      this.idInputRef.current,
+      this.state.MaSV,
+      this.maSVInputRef.current,
       "Mã SV không đc bỏ trống"
     );
 
@@ -79,45 +84,45 @@ import { addUserAction, updateUserAction } from "../../store/actions/userAction"
       "Username không đc bỏ trống"
     );
 
-    isValid &= this.validateRequired(
-      this.state.email,
-      this.emailInputRef.current,
-      "Email không đc bỏ trống"
-    ) &&
-    this.validateEmail(
-      this.state.email,
-      this.emailInputRef.current,
-      "Email ko dung dinh dang"
-    );
+    isValid &=
+      this.validateRequired(
+        this.state.email,
+        this.emailInputRef.current,
+        "Email không đc bỏ trống"
+      ) &&
+      this.validateEmail(
+        this.state.email,
+        this.emailInputRef.current,
+        "Email ko dung dinh dang"
+      );
 
     isValid &= this.validateRequired(
       this.state.phoneNumber,
-      this. phoneNumberInputRef.current,
+      this.phoneNumberInputRef.current,
       "sđt không đc bỏ trống"
     );
 
-    
-   
-      if(isValid) {
-         //cờ để so sánh add hoặc update
-          if(this.state.id) {
+    if (isValid) {
+      // cờ để so sánh add hoặc update
+      console.log(this.state.id);
+      if (this.state.id) {
         //   //edit mode
-           console.log("edit mode") ;
-          this.props.dispatch(updateUserAction(this.state));
-        }else {
-          this.props.dispatch(addUserAction(this.state));
-          }
-
-         
+        console.log("edit mode");
+        this.props.dispatch(updateUserAction(this.state));
+      } else {
+        console.log("add mode");
+        this.props.dispatch(addUserAction(this.state));
       }
+    }
 
-      this.setState({ //sau khi save (add) item moi set state ve mặc định
-        id: "",
-        username: "",
-        phoneNumber: "",
-        email: "",
-       
-      });
+    this.setState({
+      //sau khi save (add) item moi set state ve mặc định
+      id: "",
+      MaSV:"",
+      username: "",
+      phoneNumber: "",
+      email: "",
+    });
 
     console.log(isValid);
     //this.usernameInputRef.current.innerHTML ="username ko dc bỏ trống ";
@@ -132,22 +137,19 @@ import { addUserAction, updateUserAction } from "../../store/actions/userAction"
         <div className="card-body">
           <form onSubmit={this.handleSubmit}>
             <div className="row">
-            <div className="col-6">
+              <div className="col-6">
                 <div className="form-group">
                   <label>Mã SV</label>
                   <input
                     //onChange={(event) => {this.handleChange(event)}}
                     // value={this.props.selectedUser?.id}
-                    value={this.state.id}
+                    value={this.state.MaSV}
                     onChange={this.handleChange}
                     type="text"
                     className="form-control"
-                    name="id"
+                    name="MaSV"
                   />
-                  <span
-                    ref={this.idInputRef}
-                    className="text-danger"
-                  ></span>
+                  <span ref={this.maSVInputRef} className="text-danger"></span>
                 </div>
               </div>
 
@@ -169,28 +171,30 @@ import { addUserAction, updateUserAction } from "../../store/actions/userAction"
                   ></span>
                 </div>
               </div>
-             
-              
+
               <div className="col-6">
                 <div className="form-group">
                   <label>Số điện thoại</label>
                   <input
-                  //  value={this.props.selectedUser?.phoneNumber}
-                  value={this.state.phoneNumber}
+                    //  value={this.props.selectedUser?.phoneNumber}
+                    value={this.state.phoneNumber}
                     name="phoneNumber"
                     onChange={this.handleChange}
                     type="text"
                     className="form-control"
                   />
-                  <span ref={this.phoneNumberInputRef} className="text-danger"></span>
+                  <span
+                    ref={this.phoneNumberInputRef}
+                    className="text-danger"
+                  ></span>
                 </div>
               </div>
               <div className="col-6">
                 <div className="form-group">
                   <label>Email</label>
                   <input
-                  //  value={this.props.selectedUser?.email}
-                  value={this.state.email}
+                    //  value={this.props.selectedUser?.email}
+                    value={this.state.email}
                     name="email"
                     onChange={this.handleChange}
                     type="text"
@@ -199,14 +203,15 @@ import { addUserAction, updateUserAction } from "../../store/actions/userAction"
                   <span ref={this.emailInputRef} className="text-danger"></span>
                 </div>
               </div>
-            
             </div>
 
-            <button className="btn btn-warning mr-2" type="submitr">thêm sinh viên</button>
-          
-            <button type="reset" value="reset" className="btn btn-outline-dark">
+            <button className="btn btn-warning mr-2" type="submitr">
+              thêm sinh viên
+            </button>
+
+            {/* <button type="reset" value="reset" className="btn btn-outline-dark">
               RESET
-            </button> 
+            </button>  */}
             {/* phải nhét vào form type reset mới ăn */}
           </form>
         </div>

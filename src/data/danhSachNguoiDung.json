@@ -1,16 +1,16 @@
 [
   {
     "id": 1,
+    "MaSV": "01",
     "username": "man. nguyen",
     "phoneNumber": "12345678",
-    "email": "man@gmail.com",
-    "type": "Client"
+    "email": "man@gmail.com"
+   
   },
   {
     "id": 2,
     "username": "khai.tran",
     "phoneNumber": "12345678",
-    "email": "khai@gmail.com",
-    "type": "Admin"
+    "email": "khai@gmail.com"
   }
 ]
