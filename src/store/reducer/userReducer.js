@@ -16,7 +16,11 @@ if (stringify) {
 export const userReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case ADD_USER: {
-      action.payload.id = Date.now();
+      const lastItemId = state.userList[state.userList.length - 1].id;
+
+// Generate a new ID by incrementing the last item's ID
+const newId = lastItemId + 1;
+      action.payload.id = newId;
       state.userList = [...state.userList, action.payload]; //push action.payload từ form input
       localStorage.setItem("USER_LIST", JSON.stringify(state.userList));
       break;

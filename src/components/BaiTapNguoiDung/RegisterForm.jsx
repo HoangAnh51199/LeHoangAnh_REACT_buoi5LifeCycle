@@ -66,6 +66,29 @@ class RegisterForm extends Component {
     return false;
   };
 
+  validateuserName = (value, ref, message) => {
+    if (/[a-vxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđ]/.test(value)) {
+      //neu thoa man patern cua email
+      ref.innerHTML = "";
+      return true;
+    }
+    ref.innerHTML = message;
+
+    return false;
+  };
+
+  validatePhone = (value, ref, message) => {
+    if (/^[0-9]/.test(value)) {
+      //neu thoa man patern cua email
+      ref.innerHTML = "";
+      return true;
+    }
+    ref.innerHTML = message;
+
+    return false;
+  };
+
+
   handleSubmit = (event) => {
     event.preventDefault(); //chống load trang
     console.log(this.state);
@@ -82,6 +105,11 @@ class RegisterForm extends Component {
       this.state.username,
       this.usernameInputRef.current,
       "Username không đc bỏ trống"
+    )&&
+    this.validateuserName(
+      this.state.username,
+      this.usernameInputRef.current,
+      "họ tên ko dung dinh dang"
     );
 
     isValid &=
@@ -100,6 +128,10 @@ class RegisterForm extends Component {
       this.state.phoneNumber,
       this.phoneNumberInputRef.current,
       "sđt không đc bỏ trống"
+    )&& this.validatePhone(
+      this.state.phoneNumber,
+      this.phoneNumberInputRef.current,
+      "sdt ko dung dinh dang"
     );
 
     if (isValid) {
