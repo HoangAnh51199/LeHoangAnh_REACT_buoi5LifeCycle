@@ -67,7 +67,11 @@ class RegisterForm extends Component {
   };
 
   validateuserName = (value, ref, message) => {
-    if (/[a-vxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđ]/.test(value)) {
+    if (
+      /[a-vxyỳọáầảấờễàạằệếýộậốũứĩõúữịỗìềểẩớặòùồợãụủíỹắẫựỉỏừỷởóéửỵẳẹèẽổẵẻỡơôưăêâđ]/.test(
+        value
+      )
+    ) {
       //neu thoa man patern cua email
       ref.innerHTML = "";
       return true;
@@ -88,29 +92,63 @@ class RegisterForm extends Component {
     return false;
   };
 
+  kiemtraMaSVTonTai = (value, ref, message, listSV) => {
+   
+    const idx = listSV.findIndex((element) => element.MaSV === value);
+    console.log(idx);
+    if (idx !== -1) {//tìm thấy
+     
+      
+        ref.innerHTML = message;
+
+        return false;
+    }else{
+     
+      ref.innerHTML = "";
+      return true;
+      
+    }
+
+  
+  };
 
   handleSubmit = (event) => {
+   
     event.preventDefault(); //chống load trang
+    const data = this.props.userList;
+    console.log(data);
     console.log(this.state);
     let isValid = true;
     //= domElementId
 
-    isValid &= this.validateRequired(
-      this.state.MaSV,
-      this.maSVInputRef.current,
-      "Mã SV không đc bỏ trống"
-    );
+    isValid &=
+      this.validateRequired(
+        this.state.MaSV,
+        this.maSVInputRef.current,
+        "Mã SV không đc bỏ trống"
+      );
+      
+      if(this.state.id=="") {
+  isValid &= this.kiemtraMaSVTonTai(
+    this.state.MaSV,
+    this.maSVInputRef.current,
+    "maSV đã tồn tại",
+    data
+  );
+}
+     
 
-    isValid &= this.validateRequired(
-      this.state.username,
-      this.usernameInputRef.current,
-      "Username không đc bỏ trống"
-    )&&
-    this.validateuserName(
-      this.state.username,
-      this.usernameInputRef.current,
-      "họ tên ko dung dinh dang"
-    );
+    isValid &=
+      this.validateRequired(
+        this.state.username,
+        this.usernameInputRef.current,
+        "Username không đc bỏ trống"
+      ) &&
+      this.validateuserName(
+        this.state.username,
+        this.usernameInputRef.current,
+        "họ tên ko dung dinh dang"
+      );
 
     isValid &=
       this.validateRequired(
@@ -124,15 +162,17 @@ class RegisterForm extends Component {
         "Email ko dung dinh dang"
       );
 
-    isValid &= this.validateRequired(
-      this.state.phoneNumber,
-      this.phoneNumberInputRef.current,
-      "sđt không đc bỏ trống"
-    )&& this.validatePhone(
-      this.state.phoneNumber,
-      this.phoneNumberInputRef.current,
-      "sdt ko dung dinh dang"
-    );
+    isValid &=
+      this.validateRequired(
+        this.state.phoneNumber,
+        this.phoneNumberInputRef.current,
+        "sđt không đc bỏ trống"
+      ) &&
+      this.validatePhone(
+        this.state.phoneNumber,
+        this.phoneNumberInputRef.current,
+        "sdt ko dung dinh dang"
+      );
 
     if (isValid) {
       // cờ để so sánh add hoặc update
@@ -141,25 +181,31 @@ class RegisterForm extends Component {
         //   //edit mode
         console.log("edit mode");
         this.props.dispatch(updateUserAction(this.state));
+       
       } else {
         console.log("add mode");
         this.props.dispatch(addUserAction(this.state));
+       
       }
     }
 
+    
     this.setState({
       //sau khi save (add) item moi set state ve mặc định
       id: "",
-      MaSV:"",
+      MaSV: "",
       username: "",
       phoneNumber: "",
       email: "",
     });
+    
+    
 
     console.log(isValid);
     //this.usernameInputRef.current.innerHTML ="username ko dc bỏ trống ";
     //console.log(this.state);
   };
+
   render() {
     return (
       <div className="card p-0">
@@ -180,6 +226,7 @@ class RegisterForm extends Component {
                     type="text"
                     className="form-control"
                     name="MaSV"
+                    id="MaSV"
                   />
                   <span ref={this.maSVInputRef} className="text-danger"></span>
                 </div>
@@ -255,6 +302,7 @@ class RegisterForm extends Component {
 const mapStateToProps = (state) => {
   return {
     selectedUser: state.userReducer.selectedUser,
+    userList: state.userReducer.userList,
   };
 };
 

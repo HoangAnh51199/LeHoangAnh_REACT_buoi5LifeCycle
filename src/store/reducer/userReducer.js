@@ -27,16 +27,20 @@ const newId = lastItemId + 1;
     }
     case SET_SELECTED_USER: {
       state.selectedUser = action.payload;
+      document.getElementById("MaSV").disabled=true;
+      
+      
       break;
     }
     case UPDATE_USER: {
+     
       const data = [...state.userList];
       const idx = data.findIndex((element) => element.id === action.payload.id);
       data[idx] = action.payload;
       state.selectedUser=null;
       state.userList=data;
       localStorage.setItem("USER_LIST", JSON.stringify(state.userList));
-      
+      document.getElementById("MaSV").disabled=false;
       break;
     }
     case DELETE_USER: {
