@@ -93,27 +93,21 @@ class RegisterForm extends Component {
   };
 
   kiemtraMaSVTonTai = (value, ref, message, listSV) => {
-   
     const idx = listSV.findIndex((element) => element.MaSV === value);
     console.log(idx);
-    if (idx !== -1) {//tìm thấy
-     
-      
-        ref.innerHTML = message;
+    if (idx !== -1) {
+      //tìm thấy
 
-        return false;
-    }else{
-     
+      ref.innerHTML = message;
+
+      return false;
+    } else {
       ref.innerHTML = "";
       return true;
-      
     }
-
-  
   };
 
   handleSubmit = (event) => {
-   
     event.preventDefault(); //chống load trang
     const data = this.props.userList;
     console.log(data);
@@ -121,22 +115,20 @@ class RegisterForm extends Component {
     let isValid = true;
     //= domElementId
 
-    isValid &=
-      this.validateRequired(
+   
+
+    if (this.state.id == "" || this.state.id == null) {
+      isValid &= this.validateRequired(
         this.state.MaSV,
         this.maSVInputRef.current,
         "Mã SV không đc bỏ trống"
+      ) && this.kiemtraMaSVTonTai(
+        this.state.MaSV,
+        this.maSVInputRef.current,
+        "maSV đã tồn tại",
+        data
       );
-      
-      if(this.state.id=="") {
-  isValid &= this.kiemtraMaSVTonTai(
-    this.state.MaSV,
-    this.maSVInputRef.current,
-    "maSV đã tồn tại",
-    data
-  );
-}
-     
+    }
 
     isValid &=
       this.validateRequired(
@@ -181,15 +173,12 @@ class RegisterForm extends Component {
         //   //edit mode
         console.log("edit mode");
         this.props.dispatch(updateUserAction(this.state));
-       
-      } else {
+      } else if (this.state.id == "") {
         console.log("add mode");
         this.props.dispatch(addUserAction(this.state));
-       
       }
     }
 
-    
     this.setState({
       //sau khi save (add) item moi set state ve mặc định
       id: "",
@@ -198,8 +187,6 @@ class RegisterForm extends Component {
       phoneNumber: "",
       email: "",
     });
-    
-    
 
     console.log(isValid);
     //this.usernameInputRef.current.innerHTML ="username ko dc bỏ trống ";
